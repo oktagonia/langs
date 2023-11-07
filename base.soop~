@@ -1,0 +1,96 @@
+(define >=
+  (lambda (a b)
+    (or (> a b) (= a b))))
+
+(define fib
+  (lambda (n)
+    (if (< n 2)
+        n
+        (+ (fib (- n 1))
+           (fib (- n 2))))))
+
+(define sum
+  (lambda (data)
+    (if (null? data)
+        0
+        (+ (car data) (sum (cdr data))))))
+
+(define map
+  (lambda (fun seq)
+    (if (null? seq)
+        '()
+        (cons (fun (car seq))
+              (map fun (cdr seq))))))
+
+(define filter
+  (lambda (pred seq)
+    (cond ((null? seq) '())
+          ((pred (car seq))
+           (cons (car seq) (filter pred (cdr seq))))
+          (else (filter pred (cdr seq))))))
+
+(define list-ref
+  (lambda (seq index)
+    (if (= index 0)
+        (car seq)
+        (list-ref (cdr seq) (- index 1)))))
+
+(define reduce
+  (lambda (op nil seq)
+    (if (null? seq)
+        nil
+        (op (op (list-ref seq 0) (list-ref seq 1))
+            (foldl op nil (cdr (cdr seq)))))))
+
+(define make-counter
+  (lambda (number)
+    (lambda ()
+      (set! number (+ number 1))
+      number)))
+
+(define eval-quasiquote
+  (lambda (x)
+    (cond ((atomic? x) x)
+          ((eq? (car x) 'unquote)
+           (eval (car (cdr x)) (interaction-environment)))
+          (else (map eval-quasiquote x)))))
+
+(define quasiquote
+  (kappa (x)
+    (list 'quote (eval-quasiquote x))))
+
+(define let
+  (kappa (bindings . body)
+    (append (list (append (list 'lambda (map car bindings)) body))
+            (map (lambda (x) (car (cdr x))) bindings))))
+
+(define length
+  (lambda (l)
+    (if (null? l)
+        0
+        (+ 1 (length (cdr l))))))
+
+(define fix
+  (lambda (bindings)
+    (if (null? bindings)
+        '()
+        (append
+         (list (list 'define (car (car bindings)) (car (cdr (car bindings)))))
+         (fix (cdr bindings))))))
+
+(define let*
+  (kappa (bindings . body)
+    (append (append (list 'begin) (fix bindings)) body)))
+
+(define qsort
+  (lambda (lst)
+    (if (> 2 (length lst))
+        lst
+        (let* ((pivot (car lst))
+               (left (filter (lambda (x) (< x pivot)) lst))
+               (center (filter (lambda (x) (= x pivot)) lst))
+               (right (filter (lambda (x) (> x pivot)) lst)))
+          (append (qsort left) center (qsort right))))))
+
+; TODO: Let statements
+; TODO: Object-Oriented Programming

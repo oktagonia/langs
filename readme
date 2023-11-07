@@ -1,0 +1,8 @@
+various experiments with programming language concepts. None of these are meant for serious use. Things implemented here are
+
+1. Two scheme interpreters. Located at lisp.lisp and soop.scm.
+2. An implementation of java-style oop in scheme using closures and macros (classes.scm)
+3. A (bad) pattern matching system in scheme. Inspired by mathematica. (stephen.scm) (wolfram plz don't sue me)
+4. A lazily evaluated programming language (pretty much a lambda calc interpreter) located at lazy.scm
+5. A (failed) experiment in doing smalltalk oop (oop.scm)
+6. A "reacive" programming language in reactive.scm. Pretty much identical to lazy.scm with a minor (but important) difference.
